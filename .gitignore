@@ -1,0 +1,29 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+*.exe
+*.dll
+*.pdb
+
+# VS temp/cache
+.vs/
+*.user
+*.suo
+*.cache
+*.csproj.user
+*.csproj.FileListAbsolute.txt
+
+# Logs
+*.log
+
+# Others
+*.sourceli*
+*.AssemblyAttributes.*
+
+# Build results
+bin/
+obj/
+
+# Debug/Release folders inside bin or obj
+[Dd]ebug/
+[Rr]elease/
