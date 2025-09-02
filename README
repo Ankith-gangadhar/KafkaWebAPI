@@ -17,38 +17,44 @@
 ```cmd
 cd kafka\bin\windows
 zookeeper-server-start.bat ../config/zookeeper.properties
-
 2.2 Start Kafka Broker
+cmd
+Copy code
 cd kafka\bin\windows
 kafka-server-start.bat ../config/server.properties
-
 2.3 Create Kafka Topic
+cmd
+Copy code
 cd kafka\bin\windows
 kafka-topics.bat --create --topic product-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 kafka-topics.bat --list --bootstrap-server localhost:9092
-
 3. Run the .NET Web API
+Open the project in Visual Studio / VS Code
 
-Open project in Visual Studio / VS Code
 Ensure Kafka producer points to localhost:9092
+
 Run the API
 
 Test POST /api/kafka/produce in Swagger
 
 4. Kafka Magic Setup
 4.1 Register Cluster
-
 Open Kafka Magic → Cluster Explorer → Add New Cluster
+
 Cluster Name: LocalKafka
+
 Bootstrap Servers: localhost:9092
+
 Save cluster
 
 4.2 View Topics
 Navigate to the cluster → Topics
+
 Verify product-topic exists
 
 4.3 Consume Messages
 Select product-topic → Start Listening
+
 Messages sent from Web API appear in real-time
 
 4.4 Publish Messages (Optional)
@@ -56,8 +62,13 @@ Navigate to topic → Publish Message → enter message → send
 
 5. Execution Order
 Start Zookeeper
+
 Start Kafka Broker
+
 Verify / create topic
+
 Run .NET Web API
+
 Open Kafka Magic, register cluster, start consuming messages
+
 Test API → messages should appear in Kafka Magic
