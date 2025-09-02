@@ -11,16 +11,17 @@ namespace KafkaWebAPI.Services
         public async Task<string> ProduceAsync(string topic, string message)
         {
             var config = new ProducerConfig { BootstrapServers = _bootstrapServers };
+
             using var producer = new ProducerBuilder<Null, string>(config).Build();
 
             try
             {
-                var result = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
-                return $"Message '{message}' delivered to {result.TopicPartitionOffset}";
+                var deliveryResult = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
+                return $"Delivered '{message}' to {deliveryResult.TopicPartitionOffset}";
             }
-            catch (Exception ex)
+            catch (ProduceException<Null, string> ex)
             {
-                return $"Error: {ex.Message}";
+                return $"Kafka produce error: {ex.Error.Reason}";
             }
         }
     }
