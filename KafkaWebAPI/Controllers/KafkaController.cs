@@ -1,4 +1,4 @@
-﻿using KafkaWebAPI.Services;
+using KafkaWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
