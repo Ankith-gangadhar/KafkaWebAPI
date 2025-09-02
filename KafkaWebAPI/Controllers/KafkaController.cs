@@ -1,4 +1,4 @@
-﻿using KafkaWebAPI.Services;
+using KafkaWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,18 +8,22 @@ namespace KafkaWebAPI.Controllers
     [Route("api/[controller]")]
     public class KafkaController : ControllerBase
     {
-        private readonly KafkaProducerService _producerService;
+        private readonly KafkaProducerService _producer;
 
-        public KafkaController(KafkaProducerService producerService)
+        public KafkaController(KafkaProducerService producer)
         {
-            _producerService = producerService;
+            _producer = producer;
         }
 
         [HttpPost("produce")]
-        public async Task<IActionResult> ProduceMessage([FromQuery] string message)
+        public async Task<IActionResult> Produce([FromQuery] string message)
         {
-            var result = await _producerService.ProduceAsync("test-topic", message);
+            if (string.IsNullOrEmpty(message))
+                return BadRequest("Message cannot be empty");
+
+            var result = await _producer.ProduceAsync("product-topic", message);
             return Ok(result);
         }
     }
+
 }
