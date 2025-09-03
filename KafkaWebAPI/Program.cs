@@ -7,6 +7,7 @@ builder.Services.AddControllers();
 
 // Register KafkaProducerService with bootstrap server
 builder.Services.AddSingleton<KafkaProducerService>();
+builder.Services.AddSingleton<KafkaConsumerService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();

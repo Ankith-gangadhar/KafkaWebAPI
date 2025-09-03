@@ -1,6 +1,5 @@
 using KafkaWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace KafkaWebAPI.Controllers
 {
@@ -8,22 +7,27 @@ namespace KafkaWebAPI.Controllers
     [Route("api/[controller]")]
     public class KafkaController : ControllerBase
     {
-        private readonly KafkaProducerService _producer;
+        private readonly KafkaProducerService _producerService;
+        private readonly KafkaConsumerService _consumerService;
 
-        public KafkaController(KafkaProducerService producer)
+        public KafkaController(KafkaProducerService producerService, KafkaConsumerService consumerService)
         {
-            _producer = producer;
+            _producerService = producerService;
+            _consumerService = consumerService;
         }
 
         [HttpPost("produce")]
-        public async Task<IActionResult> Produce([FromQuery] string message)
+        public async Task<IActionResult> Produce([FromQuery] string topic, [FromBody] string message)
         {
-            if (string.IsNullOrEmpty(message))
-                return BadRequest("Message cannot be empty");
+            await _producerService.ProduceAsync(topic, message);
+            return Ok($"Message sent to topic '{topic}': {message}");
+        }
 
-            var result = await _producer.ProduceAsync("product-topic", message);
-            return Ok(result);
+        [HttpGet("consume")]
+        public async Task<IActionResult> Consume([FromQuery] string topic, [FromQuery] int count = 5)
+        {
+            var messages = await _consumerService.ConsumeAsync(topic, count);
+            return Ok(messages);
         }
     }
-
 }

@@ -1,6 +1,4 @@
 using Confluent.Kafka;
-using System;
-using System.Threading.Tasks;
 
 namespace KafkaWebAPI.Services
 {
@@ -8,21 +6,18 @@ namespace KafkaWebAPI.Services
     {
         private readonly string _bootstrapServers = "localhost:9092";
 
-        public async Task<string> ProduceAsync(string topic, string message)
+        public async Task ProduceAsync(string topic, string message)
         {
             var config = new ProducerConfig { BootstrapServers = _bootstrapServers };
 
             using var producer = new ProducerBuilder<Null, string>(config).Build();
 
-            try
+            var dr = await producer.ProduceAsync(topic, new Message<Null, string>
             {
-                var deliveryResult = await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
-                return $"Delivered '{message}' to {deliveryResult.TopicPartitionOffset}";
-            }
-            catch (ProduceException<Null, string> ex)
-            {
-                return $"Kafka produce error: {ex.Error.Reason}";
-            }
+                Value = message
+            });
+
+            Console.WriteLine($"Delivered '{dr.Value}' to '{dr.TopicPartitionOffset}'");
         }
     }
 }
